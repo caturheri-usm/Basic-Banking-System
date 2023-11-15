@@ -46,4 +46,5 @@ model Transaksi {
   source_account_id Int
   destination_account_id Int
   amount Float
+  createdAt DateTime @default(now())
 }

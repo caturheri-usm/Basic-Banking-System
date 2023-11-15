@@ -36,6 +36,7 @@ CREATE TABLE "Transaksi" (
     "source_account_id" INTEGER NOT NULL,
     "destination_account_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Transaksi_pkey" PRIMARY KEY ("id")
 );
