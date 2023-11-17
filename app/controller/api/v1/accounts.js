@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 
 const createAccount = async (req, res) => {
   try {
-    const { user_id, bank_name, bank_account_number, balance } = req.body;
+    const { userId, bank_name, bank_account_number, balance } = req.body;
     const user = await prisma.user.findUnique({
-      where: { id: user_id },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -25,12 +25,12 @@ const createAccount = async (req, res) => {
       data: {
         user: {
           connect: {
-            id: user_id,
+            id: userId,
           },
         },
-        bank_name,
-        bank_account_number,
-        balance,
+        bank_name: bank_name,
+        bank_account_number: Number(bank_account_number),
+        balance : Number(balance),
       },
     });
     res.status(201).json({
@@ -88,10 +88,27 @@ const getAccountById = async (req, res) => {
   }
 };
 
+const deleteAccount = async (req, res) => {
+  try {
+    const accountId = parseInt(req.params.id);
+    const account = await prisma.bankAccount.delete({
+      where: { id: accountId },
+    });
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Berhasil menghapus akun",
+      data: account,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Gagal menghapus akun" });
+  }
+};
+
 const Deposit = async (req, res) => {
   try {
     const { bank_account_number, amount } = req.body;
-    // Validasi bahwa akun ada
     const account = await prisma.bankAccount.findUnique({
       where: { bank_account_number: bank_account_number },
     });
@@ -99,7 +116,6 @@ const Deposit = async (req, res) => {
     if (!account) {
       return res.status(404).json({ error: "Akun tidak ditemukan" });
     }
-    // Melakukan deposit
     const depositAccount = await prisma.bankAccount.update({
       where: { bank_account_number: bank_account_number },
       data: {
@@ -152,6 +168,7 @@ module.exports = {
   createAccount,
   getAccounts,
   getAccountById,
+  deleteAccount,
   Deposit,
   WithDraw,
 };

@@ -68,8 +68,7 @@ const getTransaksi = async (req, res) => {
         id: true,
         source_account_id: true,
         destination_account_id: true,
-        amount: true,
-        createdAt: true,
+        amount: true
       },
     });
 
@@ -116,8 +115,29 @@ const getTransaksiById = async (req, res) => {
   }
 };
 
+const deleteTransaksi = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(404).json({ error: "Transaksi tidak ditemukan" });
+    }
+    const transaction = await prisma.transaksi.delete({
+      where: { id: Number(req.params.id) },
+    });
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Berhasil menghapus transaksi",
+      data: transaction,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Gagal menghapus transaksi" });
+  }
+};
+
 module.exports = {
   createTransaksi,
   getTransaksi,
   getTransaksiById,
+  deleteTransaksi
 };

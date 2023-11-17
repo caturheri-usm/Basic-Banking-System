@@ -41,7 +41,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
+                "$ref": "#/components/schemas/RequestRegister"
               }
             }
           }
@@ -52,7 +52,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseUser"
+                  "$ref": "#/components/schemas/ResponseRegister"
                 }
               }
             }
@@ -71,18 +71,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginUser"
+                "$ref": "#/components/schemas/RequestLogin"
               }
             }
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseUser"
+                  "$ref": "#/components/schemas/ResponseLogin"
                 }
               }
             }
@@ -127,39 +127,6 @@
                   "items": {
                     "$ref": "#/components/schemas/RequestUser"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Add a new user",
-        "description": "Add a new user to the database",
-        "tags": ["user"],
-        "security": [
-          {
-            "authorization": []
-          }
-        ],
-        "requestBody": {
-          "description": "User object that needs to be added to the database",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RequestUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseUser"
                 }
               }
             }
@@ -229,7 +196,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RequestUser"
+                "$ref": "#/components/schemas/RequestUpdateUser"
               }
             }
           }
@@ -240,7 +207,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseUser"
+                  "$ref": "#/components/schemas/ResponseUpdateUser"
                 }
               }
             }
@@ -275,6 +242,108 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RequestAccount"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "summary": "Get all profiles users",
+        "description": "Returns all profiles users",
+        "tags": ["user"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "format": "json",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "identity_type": {
+                      "type": "string"
+                    },
+                    "identity_number": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "address": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/{id}": {
+      "get": {
+        "summary": "Get profile users by id",
+        "description": "Returns profile users by id",
+        "tags": ["user"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of profile to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "format": "json",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "identity_type": {
+                      "type": "string"
+                    },
+                    "identity_number": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "address": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -329,7 +398,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -376,6 +445,40 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Delete account by id",
+        "description": "Delete account by id",
+        "tags": ["account"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of account to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteAccount"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/transactions": {
@@ -405,7 +508,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseTransaction"
+                  "$ref": "#/components/schemas/ResponseTransactionPost"
                 }
               }
             }
@@ -466,7 +569,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseTransaction"
+                  "$ref": "#/components/schemas/ResponseTransactionId"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete transaction by id",
+        "description": "Delete transaction by id",
+        "tags": ["transaction"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of transaction to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransaction"
                 }
               }
             }
@@ -494,6 +631,18 @@
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDeposit"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -517,6 +666,18 @@
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithDraw"
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -530,28 +691,189 @@
       }
     },
     "schemas": {
-      "RegisterUser": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
+      "ResponseDeposit":{
+        "type":"object",
+        "properties":{
+          "message":{
+            "type":"string",
+            "example":"Deposit berhasil"
           },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
+          "data":{
+            "type":"object",
+            "properties":{
+              "id":{
+                "type":"integer",
+                "example":1
+              },
+              "userId":{
+                "type":"integer",
+                "example":5
+              },
+              "bank_name":{
+                "type":"string",
+                "example":"BCA"
+              },
+              "bank_account_number":{
+                "type":"integer",
+                "example":456123789
+              },
+              "balance":{
+                "type":"integer",
+                "example":500000
+              }
+            }
           }
         }
       },
-      "LoginUser": {
+      "ResponseWithDraw":{
+        "type":"object",
+        "properties":{
+          "message":{
+            "type":"string",
+            "example":"Penarikan berhasil"
+          },
+          "data":{
+            "type":"object",
+            "properties":{
+              "id":{
+                "type":"integer",
+                "example":1
+              },
+              "userId":{
+                "type":"integer",
+                "example":5
+              },
+              "bank_name":{
+                "type":"string",
+                "example":"BCA"
+              },
+              "bank_account_number":{
+                "type":"integer",
+                "example":456123789
+              },
+              "balance":{
+                "type":"integer",
+                "example":500000
+              }
+            }
+          }
+        }
+      },
+      "RequestRegister": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "identity_type": {
+                "type": "string",
+                "example": "KTP"
+              },
+              "identity_number": {
+                "type": "integer",
+                "format": "int64",
+                "example": "1234567890"
+              },
+              "address": {
+                "type": "string",
+                "example": "Jl. Raya Kebayoran Lama No. 12"
+              }
+            }
+          }
+        }
+      },
+      "ResponseRegister": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Register successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 1
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "johndoe@mail.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "$2a$10$0ejcloHFrEtREXCrVWAFGe2kLLNap/eY.Bt76HNzm2p5SASr6WO76"
+              }
+            }
+          }
+        }
+      },
+      "RequestLogin": {
         "type": "object",
         "properties": {
           "email": {
-            "type": "string"
+            "type": "string",
+            "example": "johndoe@mail.com"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "123456"
+          }
+        }
+      },
+      "ResponseLogin": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Login successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 1
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "johndoe@mail.com"
+              },
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huZG9lQG1haWwuY29tIiwiaWF0IjoxNzAwMTQ3Mzc4LCJleHAiOjE3MDAxNTA5Nzh9.XAijF8_txthF7PAVdbXQbAwPPmM1lIi2O1TtsW9VTFY"
+              }
+            }
           }
         }
       },
@@ -597,6 +919,54 @@
           }
         }
       },
+      "ResponseUpdateUser": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Berhasil mengubah user"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "johndoe@mail.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "123456"
+              },
+              "profile": {
+                "type": "object",
+                "properties": {
+                  "identity_type": {
+                    "type": "string",
+                    "example": "KTP"
+                  },
+                  "identity_number": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": "1234567890"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "Jl. Raya Kebayoran Lama No. 12"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "ResponseUser": {
         "type": "object",
         "properties": {
@@ -611,10 +981,45 @@
           }
         }
       },
+      "RequestUpdateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "identity_type": {
+                "type": "string",
+                "example": "KTP"
+              },
+              "identity_number": {
+                "type": "integer",
+                "format": "int64",
+                "example": "1234567890"
+              },
+              "address": {
+                "type": "string",
+                "example": "Jl. Raya Kebayoran Lama No. 12"
+              }
+            }
+          }
+        }
+      },
       "RequestAccount": {
         "type": "object",
         "properties": {
-          "user_id": {
+          "userId": {
             "type": "integer",
             "format": "int64"
           },
@@ -655,6 +1060,48 @@
           }
         }
       },
+      "DeleteAccount": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Berhasil menghapus akun"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "userId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "bank_name": {
+                "type": "string"
+              },
+              "bank_account_number": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "balance": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          }
+        }
+      },
       "RequestTransaction": {
         "type": "object",
         "properties": {
@@ -672,28 +1119,171 @@
           }
         }
       },
+      "DeleteTransaction": {
+        "type":"object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Berhasil menghapus transaksi"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "source_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "destination_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "amount": {
+                "type": "number",
+                "format": "double"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
       "ResponseTransaction": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "source_account_id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "destination_account_id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          },
-          "createdAt": {
+          "status": {
             "type": "string",
-            "format": "date-time"
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Berhasil mengambil daftar transactions"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "source_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "destination_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "amount": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          }
+        }
+      },
+      "ResponseTransactionPost": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Transaksi berhasil"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "source_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "destination_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "amount": {
+                "type": "number",
+                "format": "double"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      "ResponseTransactionId": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Berhasil mengambil detail transaction"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "source_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "destination_account_id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "amount": {
+                "type": "number",
+                "format": "double"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
           }
         }
       },

@@ -1,11 +1,15 @@
 const users = require("./api/v1/users");
+const profile = require("./api/v1/profile");
 const accounts = require("./api/v1/accounts");
 const transactions = require("./api/v1/transactions");
 const auth = require("./api/v1/auth");
+const media = require("./api/v1/media");
 
 module.exports = {
   users,
+  profile,
   accounts,
   transactions,
   auth,
+  media,
 };

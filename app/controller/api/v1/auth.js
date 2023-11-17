@@ -11,11 +11,11 @@ module.exports = {
       where: { email },
     });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(401).json({ message: "User not found. Please Register!" });
     }
     const isPasswordCorrect = await checkPassword(password, user.password);
-    if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Wrong password" });
+    if (!isPasswordCorrect && !user) {
+      return res.status(401).json({ message: "Email or Password Invalid" });
     }
     delete user.password;
     const token = await JWTSign(user);
@@ -35,26 +35,34 @@ module.exports = {
   },
 
   async register(req, res) {
-    const { email, password, name } = req.body;
-    const user = await prisma.user.findFirst({
-      where: { email },
-    });
-    if (user) {
-      return res.status(404).json({ message: "User already exists" });
+    try {
+      const { email, password, name, profile } = req.body;
+      const user = await prisma.user.findFirst({
+        where: { email },
+      });
+      if (user) {
+        return res.status(404).json({ message: "User already exists" });
+      }
+      const hashedPassword = await hashPassword(password);
+      const createUser = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name,
+          profile: {
+            create: profile,
+          },
+        },
+      });
+      return res.status(201).json({
+        status: "success",
+        message: "Register successfully",
+        data: createUser,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Gagal membuat user baru" });
     }
-    const hashedPassword = await hashPassword(password);
-    const createUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-      },
-    });
-    return res.status(201).json({
-      status: "success",
-      message: "Register successfully",
-      data: createUser,
-    });
   },
 
   registerForm: async (req, res, next) => {
