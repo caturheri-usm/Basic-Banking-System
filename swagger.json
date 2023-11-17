@@ -364,6 +364,11 @@
         "summary": "Upload an image",
         "description": "Upload an image",
         "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
         "requestBody": {
           "description": "Video object that needs to be uploaded",
           "required": true,
@@ -400,6 +405,11 @@
         "summary": "Upload a video",
         "description": "Upload a video",
         "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
         "requestBody": {
           "description": "Video object that needs to be uploaded",
           "required": true,
@@ -436,6 +446,11 @@
         "summary": "Upload a document",
         "description": "Upload a document",
         "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
         "requestBody": {
           "description": "Document object that needs to be uploaded",
           "required": true,
@@ -472,6 +487,11 @@
         "summary": "Generate a QR code",
         "description": "Generate a QR code",
         "tags": ["qrcode"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
         "requestBody": {
           "description": "QR code object that needs to be generated",
           "required": true,
@@ -509,7 +529,11 @@
         "summary": "Upload an image to ImageKit",
         "description": "Upload an image to ImageKit",
         "tags": ["upload"],
-        "consumes": ["multipart/form-data"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
         "requestBody": {
           "description": "Image object that needs to be uploaded to ImageKit",
           "required": true,

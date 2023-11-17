@@ -64,29 +64,29 @@ router.use("/files", express.static("public/docs"));
 
 router.post(
   "/api/v1/upload-image",
-  storage.Image.single("image"),
+  storage.Image.single("image"), auth,
   controller.media.uploadImage
 );
 
 router.post(
   "/api/v1/upload-video",
-  storage.Video.single("video"),
+  storage.Video.single("video"), auth,
   controller.media.uploadVideo
 );
 
 router.post(
   "/api/v1/upload-docs",
-  storage.File.single("docs"),
+  storage.File.single("docs"), auth,
   controller.media.uploadFile
 );
 
 //QR-CODE
-router.post("/api/v1/qr-code", controller.media.generateQRCode);
+router.post("/api/v1/qr-code", auth, controller.media.generateQRCode);
 
 //imagekit
 router.post(
   "/api/v1/imagekit",
-  multer.single("image"),
+  multer.single("image"), auth,
   controller.media.uploadImageKit
 );
 
