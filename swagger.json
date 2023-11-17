@@ -27,6 +27,14 @@
     {
       "name": "transaction",
       "description": "Transaction management"
+    },
+    {
+      "name": "qrcode",
+      "description": "QR Code management"
+    },
+    {
+      "name": "upload",
+      "description": "Upload management"
     }
   ],
   "paths": {
@@ -344,6 +352,188 @@
                       "type": "string"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload-image": {
+      "post": {
+        "summary": "Upload an image",
+        "description": "Upload an image",
+        "tags": ["upload"],
+        "requestBody": {
+          "description": "Video object that needs to be uploaded",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUploadImage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload-video": {
+      "post": {
+        "summary": "Upload a video",
+        "description": "Upload a video",
+        "tags": ["upload"],
+        "requestBody": {
+          "description": "Video object that needs to be uploaded",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "video": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Video uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUploadVideo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload-docs": {
+      "post": {
+        "summary": "Upload a document",
+        "description": "Upload a document",
+        "tags": ["upload"],
+        "requestBody": {
+          "description": "Document object that needs to be uploaded",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "docs": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Document uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUploadDocs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/qr-code": {
+      "post": {
+        "summary": "Generate a QR code",
+        "description": "Generate a QR code",
+        "tags": ["qrcode"],
+        "requestBody": {
+          "description": "QR code object that needs to be generated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "https://www.google.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "QR code generated successfully",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imagekit": {
+      "post": {
+        "summary": "Upload an image to ImageKit",
+        "description": "Upload an image to ImageKit",
+        "tags": ["upload"],
+        "consumes": ["multipart/form-data"],
+        "requestBody": {
+          "description": "Image object that needs to be uploaded to ImageKit",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image uploaded to ImageKit successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUploadImageKit"
                 }
               }
             }
@@ -691,69 +881,69 @@
       }
     },
     "schemas": {
-      "ResponseDeposit":{
-        "type":"object",
-        "properties":{
-          "message":{
-            "type":"string",
-            "example":"Deposit berhasil"
+      "ResponseDeposit": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Deposit berhasil"
           },
-          "data":{
-            "type":"object",
-            "properties":{
-              "id":{
-                "type":"integer",
-                "example":1
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
               },
-              "userId":{
-                "type":"integer",
-                "example":5
+              "userId": {
+                "type": "integer",
+                "example": 5
               },
-              "bank_name":{
-                "type":"string",
-                "example":"BCA"
+              "bank_name": {
+                "type": "string",
+                "example": "BCA"
               },
-              "bank_account_number":{
-                "type":"integer",
-                "example":456123789
+              "bank_account_number": {
+                "type": "integer",
+                "example": 456123789
               },
-              "balance":{
-                "type":"integer",
-                "example":500000
+              "balance": {
+                "type": "integer",
+                "example": 500000
               }
             }
           }
         }
       },
-      "ResponseWithDraw":{
-        "type":"object",
-        "properties":{
-          "message":{
-            "type":"string",
-            "example":"Penarikan berhasil"
+      "ResponseWithDraw": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Penarikan berhasil"
           },
-          "data":{
-            "type":"object",
-            "properties":{
-              "id":{
-                "type":"integer",
-                "example":1
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
               },
-              "userId":{
-                "type":"integer",
-                "example":5
+              "userId": {
+                "type": "integer",
+                "example": 5
               },
-              "bank_name":{
-                "type":"string",
-                "example":"BCA"
+              "bank_name": {
+                "type": "string",
+                "example": "BCA"
               },
-              "bank_account_number":{
-                "type":"integer",
-                "example":456123789
+              "bank_account_number": {
+                "type": "integer",
+                "example": 456123789
               },
-              "balance":{
-                "type":"integer",
-                "example":500000
+              "balance": {
+                "type": "integer",
+                "example": 500000
               }
             }
           }
@@ -1120,7 +1310,7 @@
         }
       },
       "DeleteTransaction": {
-        "type":"object",
+        "type": "object",
         "properties": {
           "status": {
             "type": "string",
@@ -1297,6 +1487,102 @@
           "amount": {
             "type": "number",
             "format": "double"
+          }
+        }
+      },
+      "ResponseUploadImage": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Image uploaded successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "image_url": {
+                "type": "string",
+                "example": "https://example.com/images/image.jpg"
+              }
+            }
+          }
+        }
+      },
+      "ResponseUploadVideo": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Video uploaded successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "video_url": {
+                "type": "string",
+                "example": "https://example.com/videos/video.mp4"
+              }
+            }
+          }
+        }
+      },
+      "ResponseUploadDocs": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Document uploaded successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "docs_url": {
+                "type": "string",
+                "example": "https://example.com/docs/document.pdf"
+              }
+            }
+          }
+        }
+      },
+      "ResponseUploadImageKit": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Image uploaded to ImageKit successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "image.jpg"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://ik.imagekit.io/example/images/image.jpg"
+              },
+              "type": {
+                "type": "string",
+                "example": "image/png"
+              }
+            }
           }
         }
       }

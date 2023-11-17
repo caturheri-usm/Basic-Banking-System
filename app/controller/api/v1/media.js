@@ -10,8 +10,8 @@ module.exports = {
     }`;
 
     return res.status(200).json({
-      status: "true",
-      message: "success",
+      status: "success",
+      message: "Image uploaded successfully",
       data: {
         image_url: imageURL,
       },
@@ -23,8 +23,8 @@ module.exports = {
       req.file.filename
     }`;
     return res.status(200).json({
-      status: "true",
-      message: "success",
+      status: "success",
+      message: "Video uploaded successfully",
       data: {
         video_url: videoURL,
       },
@@ -32,15 +32,15 @@ module.exports = {
   },
 
   uploadFile: async (req, res) => {
-    const fileURL = `${req.protocol}://${req.get("host")}/files/${
+    const fileURL = `${req.protocol}://${req.get("host")}/docs/${
       req.file.filename
     }`;
 
     return res.status(200).json({
-      status: "true",
-      message: "success",
+      status: "success",
+      message: "Document uploaded successfully",
       data: {
-        file_url: fileURL,
+        docs_url: fileURL,
       },
     });
   },
@@ -60,8 +60,8 @@ module.exports = {
         file: stringFile,
       });
       return res.status(200).json({
-        status: "OK",
-        message: "success",
+        status: "success",
+        message: "Image uploaded to ImageKit successfully",
         data: {
           name: uploadFile.name,
           url: uploadFile.url,

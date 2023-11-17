@@ -75,8 +75,8 @@ router.post(
 );
 
 router.post(
-  "/api/v1/upload-file",
-  storage.File.single("file"),
+  "/api/v1/upload-docs",
+  storage.File.single("docs"),
   controller.media.uploadFile
 );
 
