@@ -1,0 +1,2 @@
+app name on cyclic: https://sore-cyan-cheetah-wrap.cyclic.app/
+github repo: https://github.com/caturheri/Basic-Banking-System/tree/challenge-6

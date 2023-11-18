@@ -331,7 +331,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "format": "json",
                   "properties": {
                     "id": {
                       "type": "integer",
@@ -359,129 +358,7 @@
         }
       }
     },
-    "/upload-image": {
-      "post": {
-        "summary": "Upload an image",
-        "description": "Upload an image",
-        "tags": ["upload"],
-        "security": [
-          {
-            "authorization": []
-          }
-        ],
-        "requestBody": {
-          "description": "Video object that needs to be uploaded",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Image uploaded successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseUploadImage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/upload-video": {
-      "post": {
-        "summary": "Upload a video",
-        "description": "Upload a video",
-        "tags": ["upload"],
-        "security": [
-          {
-            "authorization": []
-          }
-        ],
-        "requestBody": {
-          "description": "Video object that needs to be uploaded",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "video": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Video uploaded successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseUploadVideo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/upload-docs": {
-      "post": {
-        "summary": "Upload a document",
-        "description": "Upload a document",
-        "tags": ["upload"],
-        "security": [
-          {
-            "authorization": []
-          }
-        ],
-        "requestBody": {
-          "description": "Document object that needs to be uploaded",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "docs": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Document uploaded successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseUploadDocs"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/qr-code": {
       "post": {
         "summary": "Generate a QR code",
@@ -542,6 +419,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "This is My Profile Picture"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Profile picture of John Doe"
+                  },
                   "image": {
                     "type": "string",
                     "format": "binary"
@@ -557,7 +442,144 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseUploadImageKit"
+                  "$ref": "#/components/schemas/PostResponseImageKit"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all images from ImageKit",
+        "description": "Get all images from ImageKit",
+        "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ImageKit files retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetResponseImages"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imagekit/{id}": {
+      "get": {
+        "summary": "Get detail an image from ImageKit",
+        "description": "Get detail and information an image from ImageKit",
+        "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of image to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image retrieved from ImageKit successfully",
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResponseImageId"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an image from ImageKit",
+        "description": "Update an image from ImageKit",
+        "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of image to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Image object that needs to be updated to ImageKit",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUpdateImage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image updated to ImageKit successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUpdateImage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an image from ImageKit",
+        "description": "Delete an image from ImageKit",
+        "tags": ["upload"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of image to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ImageKit file deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponseImage"
                 }
               }
             }
@@ -1514,73 +1536,7 @@
           }
         }
       },
-      "ResponseUploadImage": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "message": {
-            "type": "string",
-            "example": "Image uploaded successfully"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "image_url": {
-                "type": "string",
-                "example": "https://example.com/images/image.jpg"
-              }
-            }
-          }
-        }
-      },
-      "ResponseUploadVideo": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "message": {
-            "type": "string",
-            "example": "Video uploaded successfully"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "video_url": {
-                "type": "string",
-                "example": "https://example.com/videos/video.mp4"
-              }
-            }
-          }
-        }
-      },
-      "ResponseUploadDocs": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "message": {
-            "type": "string",
-            "example": "Document uploaded successfully"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "docs_url": {
-                "type": "string",
-                "example": "https://example.com/docs/document.pdf"
-              }
-            }
-          }
-        }
-      },
-      "ResponseUploadImageKit": {
+      "PostResponseImageKit": {
         "type": "object",
         "properties": {
           "status": {
@@ -1594,9 +1550,13 @@
           "data": {
             "type": "object",
             "properties": {
-              "name": {
+              "title": {
                 "type": "string",
-                "example": "image.jpg"
+                "example": "This is My Profile Picture"
+              },
+              "description": {
+                "type": "string",
+                "example": "Profile picture of John Doe"
               },
               "url": {
                 "type": "string",
@@ -1605,8 +1565,190 @@
               "type": {
                 "type": "string",
                 "example": "image/png"
+              },
+              "size": {
+                "type": "integer",
+                "example": 1024
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
               }
             }
+          }
+        }
+      },
+      "GetResponseImages": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "ImageKit files retrieved successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 1
+              },
+              "title": {
+                "type": "string",
+                "example": "This is My Profile Picture"
+              },
+              "description": {
+                "type": "string",
+                "example": "Profile picture of John Doe"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://ik.imagekit.io/example/images/image.jpg"
+              }
+            }
+          }
+        }
+      },
+      "GetResponseImageId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Image retrieved from ImageKit successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "example": "This is My Profile Picture"
+              },
+              "description": {
+                "type": "string",
+                "example": "Profile picture of John Doe"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://ik.imagekit.io/example/images/image.jpg"
+              },
+              "type": {
+                "type": "string",
+                "example": "image/png"
+              },
+              "size": {
+                "type": "integer",
+                "example": 1024
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      "RequestUpdateImage": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "This is My Adventure Picture"
+          },
+          "description": {
+            "type": "string",
+            "example": "Adventure picture of John Doe"
+          }
+        }
+      },
+      "ResponseUpdateImage": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "ImageKit file updated successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "example": "This is My Adventure Picture"
+              },
+              "description": {
+                "type": "string",
+                "example": "Adventure picture of John Doe"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://ik.imagekit.io/example/images/image.jpg"
+              },
+              "type": {
+                "type": "string",
+                "example": "image/png"
+              },
+              "size": {
+                "type": "integer",
+                "example": 1024
+              },
+              "updateAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      "DeleteResponseImage": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "ImageKit file deleted successfully"
+          },
+          "title": {
+            "type": "string",
+            "example": "This is My Adventure Picture"
+          },
+          "description": {
+            "type": "string",
+            "example": "Adventure picture of John Doe"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://ik.imagekit.io/example/images/image.jpg"
+          },
+          "type": {
+            "type": "string",
+            "example": "image/png"
+          },
+          "size": {
+            "type": "integer",
+            "example": 1024
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }

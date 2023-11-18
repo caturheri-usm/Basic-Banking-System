@@ -34,7 +34,11 @@ router.post(
   auth,
   controller.transactions.createTransaksi
 );
-router.delete("/api/v1/transactions/:id", auth, controller.transactions.deleteTransaksi);
+router.delete(
+  "/api/v1/transactions/:id",
+  auth,
+  controller.transactions.deleteTransaksi
+);
 
 router.post("/api/v1/deposit", auth, controller.accounts.Deposit);
 router.post("/api/v1/withdraw", auth, controller.accounts.WithDraw);
@@ -58,27 +62,27 @@ router.post(
   })
 );
 
-router.use("/images", express.static("public/images"));
-router.use("/videos", express.static("public/videos"));
-router.use("/files", express.static("public/docs"));
+// router.use("/images", express.static("public/images"));
+// router.use("/videos", express.static("public/videos"));
+// router.use("/files", express.static("public/docs"));
 
-router.post(
-  "/api/v1/upload-image",
-  storage.Image.single("image"), auth,
-  controller.media.uploadImage
-);
+// router.post(
+//   "/api/v1/upload-image",
+//   storage.Image.single("image"), auth,
+//   controller.media.uploadImage
+// );
 
-router.post(
-  "/api/v1/upload-video",
-  storage.Video.single("video"), auth,
-  controller.media.uploadVideo
-);
+// router.post(
+//   "/api/v1/upload-video",
+//   storage.Video.single("video"), auth,
+//   controller.media.uploadVideo
+// );
 
-router.post(
-  "/api/v1/upload-docs",
-  storage.File.single("docs"), auth,
-  controller.media.uploadFile
-);
+// router.post(
+//   "/api/v1/upload-docs",
+//   storage.File.single("docs"), auth,
+//   controller.media.uploadFile
+// );
 
 //QR-CODE
 router.post("/api/v1/qr-code", auth, controller.media.generateQRCode);
@@ -86,8 +90,14 @@ router.post("/api/v1/qr-code", auth, controller.media.generateQRCode);
 //imagekit
 router.post(
   "/api/v1/imagekit",
-  multer.single("image"), auth,
+  multer.single("image"),
+  auth,
   controller.media.uploadImageKit
 );
+
+router.get("/api/v1/imagekit", auth, controller.media.getImages);
+router.get("/api/v1/imagekit/:id", auth, controller.media.getImageById);
+router.put("/api/v1/imagekit/:id", auth, controller.media.updateImage);
+router.delete("/api/v1/imagekit/:id", auth, controller.media.deleteImage);
 
 module.exports = router;
