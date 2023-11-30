@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const { hashPassword, checkPassword } = require("../../../../utils/auth");
 const { JWTSign } = require("../../../../utils/jwt");
-const app = require("../../../../firebaseConfig");
+const app = require("../../../../utils/firebaseConfig");
 const {
   getAuth,
   signInWithEmailAndPassword,

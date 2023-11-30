@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const app = require("../../../../firebaseConfig");
+const app = require("../../../../utils/firebaseConfig");
 const { getAuth, deleteUser } = require("firebase/auth");
 
 const auth = getAuth(app);
