@@ -23,10 +23,9 @@ module.exports = {
         .status(404)
         .json({ message: "Account not found. Please register." });
     }
-
     signInWithEmailAndPassword(auth, email, password)
-      .then(async () => {
-        const usr = auth.currentUser;
+      .then(async (userCredentials) => {
+        const usr = userCredentials.user;
         const emailVerified = usr.emailVerified;
 
         await prisma.user.update({

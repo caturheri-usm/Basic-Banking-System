@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const app = require("../../../../utils/firebaseConfig");
 const { getAuth, deleteUser } = require("firebase/auth");
-
 const auth = getAuth(app);
 const prisma = new PrismaClient();
 
@@ -122,9 +121,20 @@ const destroyUser = async (req, res) => {
     const user = await prisma.user.delete({
       where: { id: Number(req.params.id) },
     });
-    deleteUser(auth.currentUser).then(() => {
+    const usr = auth.currentUser;
+    deleteUser(usr).then(() => {
       console.log("User deleted");
+    }).catch((error) => {
+      console.error('Delete User Failed', error);
     });
+    // const usr = auth.currentUser;
+    // usr.delete()
+    // .then(() => {
+    //   console.log("User deleted");
+    // })
+    // .catch((error) => {
+    //   console.error('Delete User Failed', error);
+    // });
     res.status(200).json({
       status: "success",
       code: 200,
