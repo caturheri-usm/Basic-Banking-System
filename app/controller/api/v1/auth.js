@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const { hashPassword, checkPassword } = require("../../../../utils/auth");
 const { JWTSign } = require("../../../../utils/jwt");
+const app = require("../../../../firebaseConfig");
 const {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,7 +10,6 @@ const {
   sendPasswordResetEmail,
 } = require("firebase/auth");
 const prisma = new PrismaClient();
-const app = require("../../../../utils/firebaseConfig");
 const auth = getAuth(app);
 
 module.exports = {
@@ -112,7 +112,7 @@ module.exports = {
   forgotPassword: async (req, res) => {
     const { email } = req.body;
     sendPasswordResetEmail(auth, email)
-      .then( () => {
+      .then(() => {
         res.status(201).json({
           code: 201,
           status: "success",

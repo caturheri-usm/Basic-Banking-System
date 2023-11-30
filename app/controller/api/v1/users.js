@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const app = require("../../../../utils/firebaseConfig");
+const app = require("../../../../firebaseConfig");
 const { getAuth, deleteUser } = require("firebase/auth");
 
 const auth = getAuth(app);
@@ -13,7 +13,7 @@ const getUsers = async (req, res) => {
       },
       orderBy: {
         id: "asc",
-      }
+      },
     });
     if (!users || users.length === 0) {
       return res.status(404).json({ error: "No users found" });
