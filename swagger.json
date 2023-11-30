@@ -55,7 +55,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -111,6 +111,56 @@
         "responses": {
           "200": {
             "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "summary": "Reset password",
+        "description": "Reset password",
+        "tags": ["auth"],
+        "requestBody": {
+          "description": "User object that needs to be authenticated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@user.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password reset email sent. Check your email!"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -249,7 +299,44 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RequestAccount"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berhasil menghapus user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "format": "int64",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "$2a$10$0ejcloHFrEtREXCrVWAFGe2kLLNap/eY.Bt76HNzm2p5SASr6WO76"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1039,7 +1126,7 @@
           },
           "message": {
             "type": "string",
-            "example": "Register successfully"
+            "example": "Register successfully. Check your email to verify your account!"
           },
           "data": {
             "type": "object",

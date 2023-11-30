@@ -9,11 +9,12 @@ const multer = require("multer")();
 router.post("/api/v1/login", controller.auth.login);
 router.post("/api/v1/register", controller.auth.register);
 router.get("/api/v1/authenticate", auth, controller.auth.whoami);
+router.post("/api/v1/reset-password", controller.auth.forgotPassword);
 
 router.get("/api/v1/users", auth, controller.users.getUsers);
 router.get("/api/v1/users/:id", auth, controller.users.getUserById);
 router.put("/api/v1/users/:id", auth, controller.users.updateUser);
-router.delete("/api/v1/users/:id", auth, controller.users.deleteUser);
+router.delete("/api/v1/users/:id", auth, controller.users.destroyUser);
 
 router.get("/api/v1/profile", controller.profile.get);
 router.get("/api/v1/profile/:id", controller.profile.getById);

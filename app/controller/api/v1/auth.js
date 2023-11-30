@@ -1,8 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
 const { hashPassword, checkPassword } = require("../../../../utils/auth");
 const { JWTSign } = require("../../../../utils/jwt");
-
+const {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+} = require("firebase/auth");
 const prisma = new PrismaClient();
+const app = require("../../../../utils/firebaseConfig");
+const auth = getAuth(app);
 
 module.exports = {
   async login(req, res) {
@@ -11,19 +19,36 @@ module.exports = {
       where: { email },
     });
     if (!user) {
-      return res.status(401).json({ message: "User not found. Please Register!" });
+      return res
+        .status(404)
+        .json({ message: "Account not found. Please register." });
     }
-    const isPasswordCorrect = await checkPassword(password, user.password);
-    if (!isPasswordCorrect && !user) {
-      return res.status(401).json({ message: "Email or Password Invalid" });
-    }
-    delete user.password;
-    const token = await JWTSign(user);
-    return res.status(201).json({
-      status: "success",
-      message: "Login successfully",
-      data: { user, token },
-    });
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        const usr = auth.currentUser;
+        const emailVerified = usr.emailVerified;
+
+        await prisma.user.update({
+          where: { email: user.email },
+          data: {
+            email_verified: emailVerified,
+          },
+        });
+
+        delete user.password;
+        const token = await JWTSign(user);
+        return res.status(201).json({
+          status: "success",
+          message: "Login successfully",
+          data: { user, token },
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        return res.status(401).json({ message: "Invalid email or password." });
+      });
   },
 
   async whoami(req, res) {
@@ -46,23 +71,59 @@ module.exports = {
       const hashedPassword = await hashPassword(password);
       const createUser = await prisma.user.create({
         data: {
-          email,
-          password: hashedPassword,
           name,
+          email,
+          email_verified: false,
+          password: hashedPassword,
           profile: {
             create: profile,
           },
         },
       });
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              console.log("Email verfification sent!");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          const user = userCredentials.user;
+          console.log("Successfully created new user:", user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Error creating new user: ", errorCode, errorMessage);
+        });
       return res.status(201).json({
         status: "success",
-        message: "Register successfully",
+        message:
+          "Register successfully. Check your email to verify your account!",
         data: createUser,
       });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Gagal membuat user baru" });
     }
+  },
+
+  forgotPassword: async (req, res) => {
+    const { email } = req.body;
+    sendPasswordResetEmail(auth, email)
+      .then( () => {
+        res.status(201).json({
+          code: 201,
+          status: "success",
+          message: "Password reset email sent. Check your email!",
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   },
 
   registerForm: async (req, res, next) => {

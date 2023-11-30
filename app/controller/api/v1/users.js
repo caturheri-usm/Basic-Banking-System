@@ -1,38 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
+const app = require("../../../../utils/firebaseConfig");
+const { getAuth, deleteUser } = require("firebase/auth");
 
+const auth = getAuth(app);
 const prisma = new PrismaClient();
-
-// const createUser = async (req, res) => {
-//   try {
-//     if (!req.body) {
-//       return res.status(400).json({ error: "Missing required fields" });
-//     }
-//     const { name, email, password, profile } = req.body;
-//     const existingUser = await prisma.user.findUnique({ where: { email } });
-//     if (existingUser) {
-//       return res.status(409).json({ error: "User already exists" });
-//     }
-//     const user = await prisma.user.create({
-//       data: {
-//         name,
-//         email,
-//         password,
-//         profile: {
-//           create: profile,
-//         },
-//       },
-//     });
-//     res.status(201).json({
-//       status: "success",
-//       code: 201,
-//       message: "Berhasil menambahkan user baru",
-//       data: user,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Gagal menambahkan user baru" });
-//   }
-// };
 
 const getUsers = async (req, res) => {
   try {
@@ -40,6 +11,9 @@ const getUsers = async (req, res) => {
       include: {
         profile: true,
       },
+      orderBy: {
+        id: "asc",
+      }
     });
     if (!users || users.length === 0) {
       return res.status(404).json({ error: "No users found" });
@@ -88,9 +62,12 @@ const updateUser = async (req, res) => {
     if (!req.params.id || !req.body) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    const currentUserID = req.user.id;
-    if (Number(req.params.id) !== currentUserID) {
-      return res.status(403).json({ error: "Unauthorized access" });
+    let currentUserID = await prisma.user.findUnique({
+      include: { profile: true },
+      where: { id: Number(req.params.id) },
+    });
+    if (!currentUserID) {
+      return res.status(404).json({ error: "User not found" });
     }
     const { name, email, password, profile } = req.body;
     const user = await prisma.user.update({
@@ -100,7 +77,16 @@ const updateUser = async (req, res) => {
         email,
         password,
         profile: {
-          update: profile,
+          update: {
+            where: {
+              userId: Number(req.params.id),
+            },
+            data: {
+              identity_type: profile.identity_type,
+              identity_number: profile.identity_number,
+              address: profile.address,
+            },
+          },
         },
       },
     });
@@ -116,20 +102,28 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const destroyUser = async (req, res) => {
   try {
     if (!req.params.id) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    const currentUserID = req.user.id;
-    if (Number(req.params.id) !== currentUserID) {
-      return res.status(403).json({ error: "Unauthorized access" });
-    }
-    const user = await prisma.user.delete({
-      where: { id: currentUserID },
+    let currentUserID = await prisma.user.findUnique({
       include: {
         profile: true,
       },
+      where: { id: Number(req.params.id) },
+    });
+    if (!currentUserID) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    let profile = await prisma.profile.delete({
+      where: { userId: Number(req.params.id) },
+    });
+    const user = await prisma.user.delete({
+      where: { id: Number(req.params.id) },
+    });
+    deleteUser(auth.currentUser).then(() => {
+      console.log("User deleted");
     });
     res.status(200).json({
       status: "success",
@@ -147,5 +141,5 @@ module.exports = {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser,
+  destroyUser,
 };
